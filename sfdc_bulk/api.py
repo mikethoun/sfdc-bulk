@@ -41,8 +41,7 @@ class SalesforceBulkAPI(object):
 
         # use SalesforceLogin from simple_salesforce for authentication
         self.session_id, host = SalesforceLogin(username=username, password=password, security_token=security_token, organizationId=organization_id, sandbox=sandbox)
-        host = "https://" + host if host[0:4] != 'http' else host
-        endpoint = host.replace(".salesforce.com", "-api.salesforce.com")
+        endpoint = "https://" + host if host[0:4] != 'http' else host
         endpoint += "/services/async/%s" % API_version
         self.endpoint = endpoint
 
