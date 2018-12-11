@@ -37,12 +37,11 @@ class SalesforceBulkAPI(object):
     batches = {}  # dict of job_id => [batch_id, batch_id, ...]
     batch_statuses = {}
 
-    def __init__(self, username=None, password=None, security_token=None, organization_id=None, sandbox=False, API_version="37.0", batch_size=5000, logger=None, verbose=True):
+    def __init__(self, username=None, password=None, security_token=None, organization_id=None, sandbox=False, API_version="44.0", batch_size=5000, logger=None, verbose=True):
 
         # use SalesforceLogin from simple_salesforce for authentication
         self.session_id, host = SalesforceLogin(username=username, password=password, security_token=security_token, organizationId=organization_id, sandbox=sandbox)
-        host = "https://" + host if host[0:4] != 'http' else host
-        endpoint = host.replace(".salesforce.com", "-api.salesforce.com")
+        endpoint = "https://" + host if host[0:4] != 'http' else host
         endpoint += "/services/async/%s" % API_version
         self.endpoint = endpoint
 
