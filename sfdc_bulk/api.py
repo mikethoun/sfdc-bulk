@@ -147,14 +147,14 @@ class SalesforceBulkAPI(object):
         except KeyError:
             raise Exception("Job id '%s' does not have any batches!" % job_id)
 
-    def wait_for_batch(self, batch_id, timeout=60*10, sleep_interval=10):
+    def wait_for_batch(self, batch_id, timeout=60*120, sleep_interval=10):
         waited = 0
         while not self.is_batch_done(batch_id) and waited < timeout:
             self._logger.debug("Waiting...")
             time.sleep(sleep_interval)
             waited += sleep_interval
 
-    def wait_for_job(self, job_id, timeout=60*60, sleep_interval=30):
+    def wait_for_job(self, job_id, timeout=60*120, sleep_interval=30):
         waited = 0
         while not self.is_job_done(job_id) and waited < timeout:
             self._logger.debug("Waiting...")
