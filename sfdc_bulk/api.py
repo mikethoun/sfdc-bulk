@@ -49,7 +49,7 @@ class SalesforceBulkAPI(object):
 
         if not logger:
             logger = logging.getLogger(__name__)
-            logger.setLevel(logging.DEBUG)
+            logger.setLevel(logging.INFO)
             if verbose:
                 h = logging.StreamHandler()
                 h.setFormatter(logging.Formatter("%(levelname)s - %(message)s"))
