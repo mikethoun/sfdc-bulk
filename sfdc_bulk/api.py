@@ -274,7 +274,7 @@ class SalesforceBulkAPI(object):
 
         return result_ids
 
-    def get_query_result(self, job_id, batch_id, result_id):
+    def get_query_result(self, job_id, batch_id, result_id, read_as_str=False):
 
         self._logger.debug("Downloading result id %s..." % (result_id))
 
@@ -284,13 +284,13 @@ class SalesforceBulkAPI(object):
 
         self._logger.debug("Download complete.")
 
-        result = pd.read_csv(StringIO(req.text))
+        result = pd.read_csv(StringIO(req.text), dtype=str if read_as_str else None)
         return(result)
 
-    def get_all_query_results(self, job_id):
+    def get_all_query_results(self, job_id, read_as_str=False):
         batch_id = self.batches[job_id][0]
         result_ids = self.get_result_ids_for_query(job_id)
-        results = [self.get_query_result(job_id, batch_id, result_id) for result_id in result_ids]
+        results = [self.get_query_result(job_id, batch_id, result_id, read_as_str) for result_id in result_ids]
 
         job_status = self.get_status(job_id, 'job')
         self._logger.debug("=====")
@@ -327,7 +327,7 @@ class SalesforceBulkAPI(object):
 
         return self.batches[job_id]
 
-    def get_bulk_csv_operation_result(self, job_id, batch_id):
+    def get_bulk_csv_operation_result(self, job_id, batch_id, read_as_str=False):
 
         self._logger.debug("Downloading results for batch id %s..." % (batch_id))
 
@@ -342,13 +342,13 @@ class SalesforceBulkAPI(object):
 
         self._logger.debug("Download complete.")
 
-        result = pd.read_csv(StringIO(req.text))
+        result = pd.read_csv(StringIO(req.text), dtype=str if read_as_str else None)
         return result
 
-    def get_bulk_csv_operation_results(self, job_id):
+    def get_bulk_csv_operation_results(self, job_id, read_as_str=False):
 
         self.wait_for_job(job_id)
-        results = [self.get_bulk_csv_operation_result(job_id, batch_id) for batch_id in self.batches[job_id]]
+        results = [self.get_bulk_csv_operation_result(job_id, batch_id, read_as_str) for batch_id in self.batches[job_id]]
 
         job_status = self.get_status(job_id, 'job')
         self._logger.debug("=====")
